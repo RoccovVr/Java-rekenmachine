@@ -1,0 +1,29 @@
+package OAVD;
+
+
+
+class Optellen {
+
+    public boolean bevat_plus(String str){
+        return(str.contains("+"));
+        }
+
+        public String[] voor_en_na_plus(String str){
+        String trimmed = str.trim();
+        String[] split = trimmed.split("\\+");
+        return(split);
+
+        //return(split[0].matches("[0-9]+") && split[1].matches("[0-9]+"));
+    }
+
+    public int resultaat(String str){
+        int string_to_integer = Integer.parseInt(str);
+        return(string_to_integer);
+    }
+
+    public static void main(String[] args) {
+        Optellen optel_object = new Optellen();
+        System.out.println(optel_object.resultaat("2"));
+    }
+}
+// Outputs Match found
