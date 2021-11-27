@@ -3,22 +3,41 @@ package OAVD;
 public class Rekenen {
 
     //vb "2 + 23" geeft 25:
-    public Integer resultaat_optel(String str) {
+    public Double resultaat_optel(String str) {
         String trimmed = str.replaceAll("\\s+", "");
         String[] split = trimmed.split("\\+");
-        Integer[] split_als_integers = {Integer.parseInt(split[0]), Integer.parseInt(split[1])};
-        int resultaat = split_als_integers[0] + split_als_integers[1];
+        Double[] split_als_doubles = {Double.parseDouble(split[0]), Double.parseDouble(split[1])};
+        double resultaat = split_als_doubles[0] + split_als_doubles[1];
         return (resultaat);
         //return(split[0].matches("[0-9]+") && split[1].matches("[0-9]+"));
     }
 
-    public Integer resultaat_aftrek(String str) {
+    public Double resultaat_aftrek(String str) {
         String trimmed = str.replaceAll("\\s+", "");
         String[] split = trimmed.split("-");
-        Integer[] split_als_integers = {Integer.parseInt(split[0]), Integer.parseInt(split[1])};
-        int resultaat = split_als_integers[0] - split_als_integers[1];
+        Double[] split_als_doubles = {Double.parseDouble(split[0]), Double.parseDouble(split[1])};
+        double resultaat = split_als_doubles[0] - split_als_doubles[1];
         return (resultaat);
+    }
 
+    public Double resultaat_verm(String str) {
+        String trimmed = str.replaceAll("\\s+", "");
+        String[] split = trimmed.split("\\*");
+        Double[] split_als_doubles = {Double.parseDouble(split[0]), Double.parseDouble(split[1])};
+        double resultaat = split_als_doubles[0] * split_als_doubles[1];
+        return (resultaat);
+    }
 
+    public Double resultaat_deel(String str) {
+        String trimmed = str.replaceAll("\\s+", "");
+        String[] split = trimmed.split("/");
+        Double[] split_als_doubles = {Double.parseDouble(split[0]), Double.parseDouble(split[1])};
+        double resultaat = split_als_doubles[0] / split_als_doubles[1];
+        return (resultaat);
+    }
+
+    public static void main(String[] args) {
+        Rekenen rekenobj = new Rekenen();
+        System.out.println(rekenobj.resultaat_optel("2 + 3"));
     }
 }
