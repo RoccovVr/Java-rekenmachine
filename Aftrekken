@@ -1,0 +1,13 @@
+package OAVD;
+
+public class Aftrekken {
+
+    //vb "25-2" geeft 23
+    public Integer resultaat(String str) {
+        String trimmed = str.replaceAll("\\s+", "");
+        String[] split = trimmed.split("-");
+        Integer[] split_als_integers = {Integer.parseInt(split[0]), Integer.parseInt(split[1])};
+        int resultaat = split_als_integers[0] - split_als_integers[1];
+        return (resultaat);
+    }
+}
