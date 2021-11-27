@@ -18,19 +18,20 @@ public class Stringvereenvoudiger {
     return(str.length());
     }
 
-    // 2+10+9 geeft 12+9, 2*10*11
+    // bewerkerverwijderen(2*10/11, */) geeft 20.0//11
     public String bewerker_verwijderen(String str, LinkedList<Character> karlijst){
         String substring = str.substring(0,split_2e_kar(str, karlijst));
         Rekenen optel = new Rekenen();
         Double substring_naar_double = optel.resultaat_optel(substring);
         String double_naar_string = Double.toString(substring_naar_double);
-        return(str.replaceFirst(substring, double_naar_string));
+        String str_nieuw = str.replaceFirst(substring, double_naar_string);
+        return(str_nieuw);
     }
 
     public static void main(String[] args) {
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
-        LinkedList<Character> karlijst = new LinkedList<Character>();
-        karlijst.add('+');
-        System.out.println(vereenv.bewerker_verwijderen("2+10+4",karlijst));
+        LinkedList<Character> karakters = new LinkedList<Character>();
+        karakters.add('+');
+        System.out.println(vereenv.bewerker_verwijderen("2+1+4+8", karakters));
     }
 }
