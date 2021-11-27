@@ -1,29 +1,16 @@
 package OAVD;
 
+public class Optellen {
 
-
-class Optellen {
-
-    public boolean bevat_plus(String str){
-        return(str.contains("+"));
-        }
-
-        public String[] voor_en_na_plus(String str){
-        String trimmed = str.trim();
+    //vb "2 + 23" geeft 25:
+    public Integer resultaat(String str){
+        String trimmed = str.replaceAll("\\s+","");
         String[] split = trimmed.split("\\+");
-        return(split);
+        Integer[] split_als_integers = {Integer.parseInt(split[0]), Integer.parseInt(split[1])};
+        int resultaat = split_als_integers[0] + split_als_integers[1];
+        return(resultaat);
+
 
         //return(split[0].matches("[0-9]+") && split[1].matches("[0-9]+"));
     }
-
-    public int resultaat(String str){
-        int string_to_integer = Integer.parseInt(str);
-        return(string_to_integer);
-    }
-
-    public static void main(String[] args) {
-        Optellen optel_object = new Optellen();
-        System.out.println(optel_object.resultaat("2"));
-    }
 }
-// Outputs Match found
