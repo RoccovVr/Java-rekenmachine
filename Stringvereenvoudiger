@@ -37,9 +37,7 @@ public class Stringvereenvoudiger {
         for(int i = 1; i <= aantal-1; i++){
             str_nieuw = bewerker_verwijderen_eenmalig(str_nieuw, karlijst);
         }
-        Double resultaat = rekenobj.resultaat_optel(str_nieuw);
-        String resultaat_als_string = Double.toString(resultaat);
-        return(resultaat_als_string);
+        return(Double.toString(rekenobj.resultaat_optel(str_nieuw)));
     }
 
     public static void main(String[] args) {
