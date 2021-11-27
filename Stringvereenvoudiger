@@ -1,37 +1,51 @@
 package Rekenmachine;
-
+import java.util.regex.Pattern;
 import java.util.LinkedList;
 
 public class Stringvereenvoudiger {
 
     //vind_tweede_kar("2+10+9", '+') geeft 4 als '+' in de characterlijst staat
-    public int split_2e_kar(String str, LinkedList<Character> karlijst){
+    public int split_2e_kar(String str, LinkedList<Character> karlijst) {
         int teller = 0; //nog 0 keer kar1 of kar2 gezien
-        for(int i = 0; i<= str.length(); i++){
-            if(karlijst.contains(str.charAt(i))){
+        for(int i = 0; i<= str.length(); i++) {
+            if(karlijst.contains(str.charAt(i))) {
                 teller++;
-                if(teller == 2){
+                if(teller == 2) {
                     return(i);
                 }
             }
         }
-    return(str.length());
+        return(str.length());
     }
 
     // bewerkerverwijderen(2*10/11, */) geeft 20.0//11
-    public String bewerker_verwijderen(String str, LinkedList<Character> karlijst){
-        String substring = str.substring(0,split_2e_kar(str, karlijst));
+    public String bewerker_verwijderen_eenmalig(String str, LinkedList<Character> karlijst){
+        String substring = str.substring(0, split_2e_kar(str, karlijst));
         Rekenen optel = new Rekenen();
         Double substring_naar_double = optel.resultaat_optel(substring);
         String double_naar_string = Double.toString(substring_naar_double);
-        String str_nieuw = str.replaceFirst(substring, double_naar_string);
+        String str_nieuw = str.replaceFirst(Pattern.quote(substring), double_naar_string);
         return(str_nieuw);
+    }
+
+    //bewerker_verwijderen_alles("2+3-4", [+-]) = "1"
+    public String bewerker_verwijderen_alles(String str, LinkedList<Character> karlijst){
+        String str_nieuw = str;
+        Rekenen rekenobj = new Rekenen();
+
+        int aantal = str_nieuw.length() - str_nieuw.replaceAll("\\+", "").length();
+        for(int i = 1; i <= aantal-1; i++){
+            str_nieuw = bewerker_verwijderen_eenmalig(str_nieuw, karlijst);
+        }
+        Double resultaat = rekenobj.resultaat_optel(str_nieuw);
+        String resultaat_als_string = Double.toString(resultaat);
+        return(resultaat_als_string);
     }
 
     public static void main(String[] args) {
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
         LinkedList<Character> karakters = new LinkedList<Character>();
         karakters.add('+');
-        System.out.println(vereenv.bewerker_verwijderen("2+1+4+8", karakters));
+        System.out.println(vereenv.bewerker_verwijderen_alles("2+5+3", karakters));
     }
 }
