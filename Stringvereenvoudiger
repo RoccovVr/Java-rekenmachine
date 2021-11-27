@@ -1,0 +1,22 @@
+package Rekenmachine;
+
+public class Stringvereenvoudiger {
+
+    //vind_tweede_kar("2+10+4", '+') geeft 4
+    public int index_2e_kar(String str, char kar){
+        int teller = 0; //nog 0 keer kar gezien
+        for(int i = 0; i<= str.length(); i++){
+            if(str.charAt(i) == kar){
+                teller++;
+                if(teller == 2){
+                    return(i);
+                }
+            }
+        }
+    return(str.length());
+    }
+    public static void main(String[] args) {
+        Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
+        System.out.println(vereenv.index_2e_kar("2+3+4",'+'));
+    }
+}
