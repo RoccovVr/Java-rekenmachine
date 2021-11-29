@@ -38,24 +38,26 @@ public class Rekenen { //geldig: 2+3, 2*3, 2/3, 2-3, 2^3
         return (resultaat);
     }
 
-    /*
-    public Double resultaat_OAVDM(String str){
+    public Double resultaat_VD(String str){
+        Rekenen rekenobj = new Rekenen();
+        try{
+            return(rekenobj.resultaat_verm(str));
+        } catch(Exception e1){
+            return(rekenobj.resultaat_deel(str));
+        }
+    }
+
+    public Double resultaat_OA(String str){
         Rekenen rekenobj = new Rekenen();
         try{
             return(rekenobj.resultaat_optel(str));
         } catch(Exception e1){
             return(rekenobj.resultaat_aftrek(str));
-        } catch(Exception e2){
-            return(rekenobj.resultaat_verm(str));
-        } catch(Exception e3){
-            return(rekenobj.resultaat_deel(str));
         }
     }
 
-     */
-
     public static void main(String[] args) {
         Rekenen rekenobj = new Rekenen();
-        System.out.println(rekenobj.resultaat_macht("2*3"));
+        System.out.println(rekenobj.resultaat_OA("2+3"));
     }
 }
