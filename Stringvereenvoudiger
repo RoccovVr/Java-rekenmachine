@@ -1,25 +1,30 @@
 package Rekenmachine;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.LinkedList;
 
 
 public class Stringvereenvoudiger {
 
-    public String[] verm_vereenvoudiger(String[] stringlijst){
+    //vereenvoudigt de elementenlijst [2, /, 3, *, 4, +, 1] tot 2.67 + 1
+    public String[] verm_deel_vereenvoudiger(String[] stringlijst){
         String[] stringlijst_nieuw = stringlijst;
-        Stringsplitter stringsplit_obj = new Stringsplitter;
-        ArrayList<Character> OAVDlijst = stringsplit_obj.OAVDlijst();
-        
-        ArrayList<Integer> plekken_plus;
-        for(int i=0; i<=stringlijst.length-1; i++){
-            
-        } stringlijst){ //st is getal, +, -, *, / in [12, *, 39, - ...
-            if(OAVDlijst.contains(st)){
+        Stringsplitter stringsplit_obj = new Stringsplitter();
 
+        Rekenen rekenobj = new Rekenen();
+
+        for (int i = 0; i <= stringlijst.length-1; i++) {
+            if(stringlijst[i]=="*" || stringlijst[i]== "/"){
+                String add_to_new1 = stringlijst[i-1] + stringlijst[i] + stringlijst[i+1];
+                String add_to_new2 = Double.toString(rekenobj.resultaat_VD(add_to_new1));
+                stringlijst_nieuw[i-1] = add_to_new2;
+            }else{
+                stringlijst_nieuw[i] = stringlijst[i];
             }
         }
-    }
+        return(stringlijst_nieuw);
+        }
 
     //vind_tweede_kar("2+10+9", '+') geeft 4 als '+' in de characterlijst staat
     public int split_2e_kar(String str, LinkedList<Character> karlijst) {
@@ -125,7 +130,7 @@ public class Stringvereenvoudiger {
 
     public static void main(String[] args) {
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
-        System.out.println(vereenv.termen_vereenvoudiger("2+5.1+3"));
+        String[] testlijst = {"3", "/", "4", "*", "6", "+", "2"};
+        System.out.println(vereenv.verm_deel_vereenvoudiger(testlijst));
     }
 }
-
