@@ -21,29 +21,45 @@ public class Stringvereenvoudiger {
     // bewerkerverwijderen(2*10/11, */) geeft 20.0//11
     public String bewerker_verwijderen_eenmalig(String str, LinkedList<Character> karlijst){
         String substring = str.substring(0, split_2e_kar(str, karlijst));
-        Rekenen optel = new Rekenen();
-        Double substring_naar_double = optel.resultaat_optel(substring);
+        Rekenen rekenobj = new Rekenen();
+        Double substring_naar_double = rekenobj.resultaat_optel(substring);
         String double_naar_string = Double.toString(substring_naar_double);
         String str_nieuw = str.replaceFirst(Pattern.quote(substring), double_naar_string);
         return(str_nieuw);
     }
 
+    //aantal_bewerkers("2+3-4", [+-]) wordt "234"
+    public int aantal_bewerkers(String str, LinkedList<Character> karlijst){
+        int teller = 0; //nog geen bewerkers gezien
+        for(int i = 0; i<= str.length()-1; i++){
+            if(karlijst.contains(str.charAt(i))) {
+                teller++;
+            }
+        }
+        return(teller);
+    }
     //bewerker_verwijderen_alles("2+3-4", [+-]) = "1"
     public String bewerker_verwijderen_alles(String str, LinkedList<Character> karlijst){
         String str_nieuw = str;
         Rekenen rekenobj = new Rekenen();
 
-        int aantal = str_nieuw.length() - str_nieuw.replaceAll("\\+", "").length();
+        int aantal = aantal_bewerkers(str, karlijst);
         for(int i = 1; i <= aantal-1; i++){
             str_nieuw = bewerker_verwijderen_eenmalig(str_nieuw, karlijst);
         }
         return(Double.toString(rekenobj.resultaat_optel(str_nieuw)));
     }
 
+    //"2+3+5" wordt "10"
+    public String termen_vereenvoudiger(String str){
+        LinkedList<Character> lijst_met_plusmin = new LinkedList<Character>();
+        lijst_met_plusmin.add('+');
+        lijst_met_plusmin.add('-');
+        return(bewerker_verwijderen_alles(str, lijst_met_plusmin));
+    }
+
     public static void main(String[] args) {
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
-        LinkedList<Character> karakters = new LinkedList<Character>();
-        karakters.add('+');
-        System.out.println(vereenv.bewerker_verwijderen_alles("2+5+3", karakters));
+        System.out.println(vereenv.termen_vereenvoudiger("2+5.1-3"));
     }
 }
