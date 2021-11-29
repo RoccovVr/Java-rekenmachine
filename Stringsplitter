@@ -1,0 +1,31 @@
+package Rekenmachine;
+import java.util.Arrays;
+import java.util.regex.Pattern;
+import java.util.LinkedList;
+import java.util.ArrayList;
+
+public class Stringsplitter {
+
+    public ArrayList<Character> OAVDlijst(){
+        ArrayList<Character> OAVD = new ArrayList<Character>();
+        OAVD.add('+');
+        OAVD.add('-');
+        OAVD.add('*');
+        OAVD.add('/');
+        return(OAVD);
+    }
+
+    public String[] stringsplitterOAVD(String str){
+        //String[] gesplit = str.split("((?=\\+|-|\\*|/)|(?<=\\+|-|\\*|/))");
+        String[] gesplit;
+        gesplit = str.split("((?=\\*)|(?<=\\*)|(?=/)|(?<=/)|(?=-)|(?<=-)|(?=\\+)|(?<=\\+))");
+        return(gesplit);
+        //String str_lijst = Arrays.toString(str.split("((?&lt;=;)|(?=;))"));
+    }
+
+    public static void main(String[] args) {
+        String teststring = "2+3*1";
+        Stringsplitter stringsplitobj = new Stringsplitter();
+        System.out.println(stringsplitobj.stringsplitterOAVD(teststring));
+    }
+}
