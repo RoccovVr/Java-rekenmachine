@@ -1,136 +1,33 @@
 package Rekenmachine;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.LinkedList;
+import java.util.ArrayList;
 
+public class Stringsplitter {
 
-public class Stringvereenvoudiger {
-
-    //vereenvoudigt de elementenlijst [2, /, 3, *, 4, +, 1] tot 2.67 + 1
-    public String[] verm_deel_vereenvoudiger(String[] stringlijst){
-        String[] stringlijst_nieuw = stringlijst;
-        Stringsplitter stringsplit_obj = new Stringsplitter();
-
-        Rekenen rekenobj = new Rekenen();
-
-        for (int i = 0; i <= stringlijst.length-1; i++) {
-            if(stringlijst[i]=="*" || stringlijst[i]== "/"){
-                String add_to_new1 = stringlijst[i-1] + stringlijst[i] + stringlijst[i+1];
-                String add_to_new2 = Double.toString(rekenobj.resultaat_VD(add_to_new1));
-                stringlijst_nieuw[i-1] = add_to_new2;
-            }else{
-                stringlijst_nieuw[i] = stringlijst[i];
-            }
-        }
-        return(stringlijst_nieuw);
-        }
-
-    //vind_tweede_kar("2+10+9", '+') geeft 4 als '+' in de characterlijst staat
-    public int split_2e_kar(String str, LinkedList<Character> karlijst) {
-        int teller = 0; //nog 0 keer kar1 of kar2 gezien
-        for(int i = 0; i<= str.length(); i++) {
-            if(karlijst.contains(str.charAt(i))) {
-                teller++;
-                if(teller == 2) {
-                    return(i);
-                }
-            }
-        }
-        return(str.length());
+    public ArrayList<Character> OAVDlijst(){
+        ArrayList<Character> OAVD = new ArrayList<Character>();
+        OAVD.add('+');
+        OAVD.add('-');
+        OAVD.add('*');
+        OAVD.add('/');
+        return(OAVD);
     }
 
-    // plus verwijderen(2+10+11) geeft 12.0/11
-    public String plus_verwijderen_eenmalig(String str){
-        LinkedList<Character> karlijst = new LinkedList<>();
-        karlijst.add('+');
-
-        String substring = str.substring(0, split_2e_kar(str, karlijst));
-        Rekenen rekenobj = new Rekenen();
-        Double substring_naar_double = rekenobj.resultaat_optel(substring);
-        String double_naar_string = Double.toString(substring_naar_double);
-        String str_nieuw = str.replaceFirst(Pattern.quote(substring), double_naar_string);
-        return(str_nieuw);
-    }
-
-    public String min_verwijderen_eenmalig(String str){
-        LinkedList<Character> karlijst = new LinkedList<>();
-        karlijst.add('-');
-
-        String substring = str.substring(0, split_2e_kar(str, karlijst));
-        Rekenen rekenobj = new Rekenen();
-        Double substring_naar_double = rekenobj.resultaat_aftrek(substring);
-        String double_naar_string = Double.toString(substring_naar_double);
-        String str_nieuw = str.replaceFirst(Pattern.quote(substring), double_naar_string);
-        return(str_nieuw);
-    }
-
-    public String verm_verwijderen_eenmalig(String str){
-        LinkedList<Character> karlijst = new LinkedList<>();
-        karlijst.add('*');
-
-        String substring = str.substring(0, split_2e_kar(str, karlijst));
-        Rekenen rekenobj = new Rekenen();
-        Double substring_naar_double = rekenobj.resultaat_verm(substring);
-        String double_naar_string = Double.toString(substring_naar_double);
-        String str_nieuw = str.replaceFirst(Pattern.quote(substring), double_naar_string);
-        return(str_nieuw);
-    }
-
-    public String deel_verwijderen_eenmalig(String str){
-        LinkedList<Character> karlijst = new LinkedList<>();
-        karlijst.add('/');
-
-        String substring = str.substring(0, split_2e_kar(str, karlijst));
-        Rekenen rekenobj = new Rekenen();
-        Double substring_naar_double = rekenobj.resultaat_deel(substring);
-        String double_naar_string = Double.toString(substring_naar_double);
-        String str_nieuw = str.replaceFirst(Pattern.quote(substring), double_naar_string);
-        return(str_nieuw);
-    }
-
-
-    //aantal_bewerkers("2+3-4", [+-]) wordt "234"
-    public int aantal_bewerkers(String str, LinkedList<Character> karlijst){
-        int teller = 0; //nog geen bewerkers gezien
-        for(int i = 0; i<= str.length()-1; i++){
-            if(karlijst.contains(str.charAt(i))) {
-                teller++;
-            }
-        }
-        return(teller);
-    }
-
-    //bewerker_verwijderen_alles("2+3-4", [+-]) = "1"
-    public String bewerker_verwijderen_alles(String str, LinkedList<Character> karlijst){
-        String str_nieuw = str;
-        Rekenen rekenobj = new Rekenen();
-
-        int aantal = aantal_bewerkers(str, karlijst);
-        while(str_nieuw.contains("+")){
-            for(int i = 0; i<= str_nieuw.length()-1; i++){
-                if(str_nieuw.charAt(i) == '+'){
-
-                }
-            }
-        }
-        for(int i = 1; i <= aantal-1; i++){
-            str_nieuw = plus_verwijderen_eenmalig(str_nieuw);
-        }
-        return(Double.toString(rekenobj.resultaat_optel(str_nieuw)));
-    }
-
-    //"2+3+5" wordt "10"
-    public String termen_vereenvoudiger(String str){
-        LinkedList<Character> lijst_met_plusmin = new LinkedList<>();
-        lijst_met_plusmin.add('+');
-        lijst_met_plusmin.add('-');
-        return(bewerker_verwijderen_alles(str, lijst_met_plusmin));
+    //split "2*1+3" in [2, *, 1, +, 3]
+    public String[] stringsplitterOAVD(String str){
+        //String[] gesplit = str.split("((?=\\+|-|\\*|/)|(?<=\\+|-|\\*|/))");
+        String[] gesplit;
+        gesplit = str.split("((?=\\*)|(?<=\\*)|(?=/)|(?<=/)|(?=-)|(?<=-)|(?=\\+)|(?<=\\+))");
+        return(gesplit);
+        //String str_lijst = Arrays.toString(str.split("((?&lt;=;)|(?=;))"));
     }
 
     public static void main(String[] args) {
-        Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
-        String[] testlijst = {"3", "/", "4", "*", "6", "+", "2"};
-        System.out.println(vereenv.verm_deel_vereenvoudiger(testlijst));
+        String teststring = "2+3*1";
+        Stringsplitter stringsplitobj = new Stringsplitter();
+        System.out.println(stringsplitobj.stringsplitterOAVD(teststring));
     }
 }
+
