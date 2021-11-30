@@ -8,24 +8,24 @@ import java.util.LinkedList;
 public class Stringvereenvoudiger {
 
     //vereenvoudigt de stringlijst [2, /, 3, *, 4, +, 1] tot 2.67 + 1
-    public LinkedList<String> verm_deel_vereenvoudiger(String[] stringlijst){
-        LinkedList<String> stringlijst_nieuw = new LinkedList<String>();
-        LinkedList<String> stringlijst_bron = new LinkedList(Arrays.asList(stringlijst));
+    public ArrayList<String> verm_deel_vereenvoudiger(String[] stringlijst){
+        ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
 
         Stringsplitter stringsplit_obj = new Stringsplitter();
         Rekenen rekenobj = new Rekenen();
 
-        while(stringlijst_bron.contains("*") || stringlijst_bron.contains("/")){
-            if(stringlijst_bron.get(1)=="*" || stringlijst_bron.get(1)== "/"){
-                String add_to_new1 = stringlijst[0] + stringlijst[1] + stringlijst[2];
+        int i =1;
+        while(i <= stringlijst_nieuw.size()-2){
+            //als hij * tegenkomt in [..., 3, *, 4, ...] dan maakt hij ervan: [..., 3*4, ...]
+            if(stringlijst_nieuw.get(i) == "*" || stringlijst_nieuw.get(i)== "/"){
+                String add_to_new1 = stringlijst[i-1] + stringlijst[i] + stringlijst[i+1];
                 String add_to_new2 = Double.toString(rekenobj.resultaat_VD(add_to_new1));
-                stringlijst_nieuw.add(add_to_new2);
-                for(int i=0; i <= 2; i++){
-                    stringlijst_bron.removeFirst();
+                for(int k=i-1; k <= i+1; k++) {
+                    stringlijst_nieuw.remove(k);
                 }
+                stringlijst_nieuw.add(i-1, add_to_new2);
             }else{
-                stringlijst_nieuw.add(stringlijst_bron.get(0));
-                stringlijst_bron.remove(stringlijst_bron.get(0));
+                i++;
             }
         }
         return(stringlijst_nieuw);
