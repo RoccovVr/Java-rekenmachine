@@ -18,10 +18,10 @@ public class Stringvereenvoudiger {
         while(i <= stringlijst_nieuw.size()-2){
             //als hij * tegenkomt in [..., 3, *, 4, ...] dan maakt hij ervan: [..., 3*4, ...]
             if(stringlijst_nieuw.get(i) == "*" || stringlijst_nieuw.get(i)== "/"){
-                String add_to_new1 = stringlijst[i-1] + stringlijst[i] + stringlijst[i+1];
+                String add_to_new1 = stringlijst_nieuw.get(i-1) + stringlijst_nieuw.get(i) + stringlijst_nieuw.get(i+1);
                 String add_to_new2 = Double.toString(rekenobj.resultaat_VD(add_to_new1));
-                for(int k=i-1; k <= i+1; k++) {
-                    stringlijst_nieuw.remove(k);
+                for(int k=1; k<= 3; k++) {
+                    stringlijst_nieuw.remove(i-1);
                 }
                 stringlijst_nieuw.add(i-1, add_to_new2);
             }else{
@@ -30,6 +30,39 @@ public class Stringvereenvoudiger {
         }
         return(stringlijst_nieuw);
         }
+
+    //vereenvoudigt de stringlijst [2, /, 3, *, 4, +, 1] tot 2.67 + 1
+    public ArrayList<String> plus_min_vereenvoudiger(String[] stringlijst){
+        ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
+
+        Stringsplitter stringsplit_obj = new Stringsplitter();
+        Rekenen rekenobj = new Rekenen();
+
+        int i =1;
+        while(i <= stringlijst_nieuw.size()-2){
+            //als hij * tegenkomt in [..., 3, +, 4, ...] dan maakt hij ervan: [..., 3+4, ...]
+            if(stringlijst_nieuw.get(i) == "+" || stringlijst_nieuw.get(i)== "-"){
+                String add_to_new1 = stringlijst_nieuw.get(i-1) + stringlijst_nieuw.get(i) + stringlijst_nieuw.get(i+1);
+                String add_to_new2 = Double.toString(rekenobj.resultaat_OA(add_to_new1));
+                for(int k=1; k<= 3; k++) {
+                    stringlijst_nieuw.remove(i-1);
+                }
+                stringlijst_nieuw.add(i-1, add_to_new2);
+            }else{
+                i++;
+            }
+        }
+        return(stringlijst_nieuw);
+    }
+
+    public String OAVD_vereenvoudiger(String[] stringlijst){
+        Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
+        ArrayList<String> VD_verdrijf = vereenv.verm_deel_vereenvoudiger(stringlijst);
+        System.out.println(VD_verdrijf);
+        String[] VD_verdrijf_array = new String[VD_verdrijf.size()];
+        ArrayList<String> OA_verdrijf = vereenv.plus_min_vereenvoudiger(VD_verdrijf_array);
+        return(OA_verdrijf.get(0));
+    }
 
     //vind_tweede_kar("2+10+9", '+') geeft 4 als '+' in de characterlijst staat
     public int split_2e_kar(String str, LinkedList<Character> karlijst) {
@@ -135,7 +168,7 @@ public class Stringvereenvoudiger {
 
     public static void main(String[] args) {
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
-        String[] testlijst = {"3", "/", "4", "*", "6", "+", "2"};
-        System.out.println(vereenv.verm_deel_vereenvoudiger(testlijst));
+        String[] testlijst = {"3", "/", "4", "*", "6", "+", "9"};
+        System.out.println(vereenv.OAVD_vereenvoudiger(testlijst));
     }
 }
