@@ -11,7 +11,6 @@ public class Stringvereenvoudiger {
     public ArrayList<String> verm_deel_vereenvoudiger(String[] stringlijst){
         ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
 
-        Stringsplitter stringsplit_obj = new Stringsplitter();
         Rekenen rekenobj = new Rekenen();
 
         int i =1;
@@ -35,7 +34,6 @@ public class Stringvereenvoudiger {
     public ArrayList<String> plus_min_vereenvoudiger(String[] stringlijst){
         ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
 
-        Stringsplitter stringsplit_obj = new Stringsplitter();
         Rekenen rekenobj = new Rekenen();
 
         int i =1;
@@ -58,117 +56,30 @@ public class Stringvereenvoudiger {
     public String OAVD_vereenvoudiger(String[] stringlijst){
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
         ArrayList<String> VD_verdrijf = vereenv.verm_deel_vereenvoudiger(stringlijst);
-        System.out.println(VD_verdrijf);
-        String[] VD_verdrijf_array = new String[VD_verdrijf.size()];
+        String[] VD_verdrijf_array = VD_verdrijf.toArray(new String[VD_verdrijf.size()]);
         ArrayList<String> OA_verdrijf = vereenv.plus_min_vereenvoudiger(VD_verdrijf_array);
         return(OA_verdrijf.get(0));
     }
 
-    //vind_tweede_kar("2+10+9", '+') geeft 4 als '+' in de characterlijst staat
-    public int split_2e_kar(String str, LinkedList<Character> karlijst) {
-        int teller = 0; //nog 0 keer kar1 of kar2 gezien
-        for(int i = 0; i<= str.length(); i++) {
-            if(karlijst.contains(str.charAt(i))) {
-                teller++;
-                if(teller == 2) {
-                    return(i);
-                }
+    public String OAVDH_vereenvoudiger(String[] stringlijst){
+        ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
+        int haak_open_index = 0;
+        int haak_gesloten_index = 0;
+        int index_loop = 0;
+        while(stringlijst_nieuw.contains("(") && index_loop <= stringlijst_nieuw.size()){
+            if(stringlijst_nieuw.get(index_loop) == "("){
+                haak_open_index = index_loop;
             }
-        }
-        return(str.length());
-    }
-
-    // plus verwijderen(2+10+11) geeft 12.0/11
-    public String plus_verwijderen_eenmalig(String str){
-        LinkedList<Character> karlijst = new LinkedList<>();
-        karlijst.add('+');
-
-        String substring = str.substring(0, split_2e_kar(str, karlijst));
-        Rekenen rekenobj = new Rekenen();
-        Double substring_naar_double = rekenobj.resultaat_optel(substring);
-        String double_naar_string = Double.toString(substring_naar_double);
-        String str_nieuw = str.replaceFirst(Pattern.quote(substring), double_naar_string);
-        return(str_nieuw);
-    }
-
-    public String min_verwijderen_eenmalig(String str){
-        LinkedList<Character> karlijst = new LinkedList<>();
-        karlijst.add('-');
-
-        String substring = str.substring(0, split_2e_kar(str, karlijst));
-        Rekenen rekenobj = new Rekenen();
-        Double substring_naar_double = rekenobj.resultaat_aftrek(substring);
-        String double_naar_string = Double.toString(substring_naar_double);
-        String str_nieuw = str.replaceFirst(Pattern.quote(substring), double_naar_string);
-        return(str_nieuw);
-    }
-
-    public String verm_verwijderen_eenmalig(String str){
-        LinkedList<Character> karlijst = new LinkedList<>();
-        karlijst.add('*');
-
-        String substring = str.substring(0, split_2e_kar(str, karlijst));
-        Rekenen rekenobj = new Rekenen();
-        Double substring_naar_double = rekenobj.resultaat_verm(substring);
-        String double_naar_string = Double.toString(substring_naar_double);
-        String str_nieuw = str.replaceFirst(Pattern.quote(substring), double_naar_string);
-        return(str_nieuw);
-    }
-
-    public String deel_verwijderen_eenmalig(String str){
-        LinkedList<Character> karlijst = new LinkedList<>();
-        karlijst.add('/');
-
-        String substring = str.substring(0, split_2e_kar(str, karlijst));
-        Rekenen rekenobj = new Rekenen();
-        Double substring_naar_double = rekenobj.resultaat_deel(substring);
-        String double_naar_string = Double.toString(substring_naar_double);
-        String str_nieuw = str.replaceFirst(Pattern.quote(substring), double_naar_string);
-        return(str_nieuw);
-    }
-
-
-    //aantal_bewerkers("2+3-4", [+-]) wordt "234"
-    public int aantal_bewerkers(String str, LinkedList<Character> karlijst){
-        int teller = 0; //nog geen bewerkers gezien
-        for(int i = 0; i<= str.length()-1; i++){
-            if(karlijst.contains(str.charAt(i))) {
-                teller++;
+            if(stringlijst_nieuw.get(index_loop) == ")"){
+                haak_gesloten_index = index_loop;
             }
+            
         }
-        return(teller);
-    }
-
-    //bewerker_verwijderen_alles("2+3-4", [+-]) = "1"
-    public String bewerker_verwijderen_alles(String str, LinkedList<Character> karlijst){
-        String str_nieuw = str;
-        Rekenen rekenobj = new Rekenen();
-
-        int aantal = aantal_bewerkers(str, karlijst);
-        while(str_nieuw.contains("+")){
-            for(int i = 0; i<= str_nieuw.length()-1; i++){
-                if(str_nieuw.charAt(i) == '+'){
-
-                }
-            }
-        }
-        for(int i = 1; i <= aantal-1; i++){
-            str_nieuw = plus_verwijderen_eenmalig(str_nieuw);
-        }
-        return(Double.toString(rekenobj.resultaat_optel(str_nieuw)));
-    }
-
-    //"2+3+5" wordt "10"
-    public String termen_vereenvoudiger(String str){
-        LinkedList<Character> lijst_met_plusmin = new LinkedList<>();
-        lijst_met_plusmin.add('+');
-        lijst_met_plusmin.add('-');
-        return(bewerker_verwijderen_alles(str, lijst_met_plusmin));
     }
 
     public static void main(String[] args) {
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
-        String[] testlijst = {"3", "/", "4", "*", "6", "+", "9"};
+        String[] testlijst = {"(", "(", "3", "/", "4", ")", "-", "1", ")", "*", "6", "+", "9"};
         System.out.println(vereenv.OAVD_vereenvoudiger(testlijst));
     }
 }
