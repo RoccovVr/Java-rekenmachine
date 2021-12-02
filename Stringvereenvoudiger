@@ -80,7 +80,7 @@ public class Stringvereenvoudiger {
         return(koppel);
     }
 
-    public ArrayList<String> OAVDH_vereenvoudiger(String[] stringlijst){
+    public String OAVDH_vereenvoudiger(String[] stringlijst){
         ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
 
@@ -90,16 +90,18 @@ public class Stringvereenvoudiger {
             int haak_gesloten_index = vereenv.hakenkoppel_te_verdrijven(stringlijst_nieuw_str)[1];
 
             ArrayList<String> tussen_haken =
-                    new ArrayList<String>(stringlijst_nieuw.subList(haak_open_index+1, haak_gesloten_index-1));
+                    new ArrayList<String>(stringlijst_nieuw.subList(haak_open_index+1, haak_gesloten_index));
             String[] tussen_haken_str = tussen_haken.toArray(new String[tussen_haken.size()]);
             String tussen_haken_vereenv = vereenv.OAVD_vereenvoudiger(tussen_haken_str);
 
             for(int k = haak_open_index; k <= haak_gesloten_index; k++){
                 stringlijst_nieuw.remove(haak_open_index);
             }
-            stringlijst_nieuw.add(tussen_haken_vereenv);
+            stringlijst_nieuw.add(haak_open_index, tussen_haken_vereenv);
         }
-        return(stringlijst_nieuw);
+
+        String[] stringlijst_nieuw_str = stringlijst_nieuw.toArray(new String[stringlijst_nieuw.size()]);
+        return(OAVD_vereenvoudiger(stringlijst_nieuw_str));
     }
 
     public static void main(String[] args) {
