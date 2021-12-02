@@ -61,25 +61,50 @@ public class Stringvereenvoudiger {
         return(OA_verdrijf.get(0));
     }
 
-    public String OAVDH_vereenvoudiger(String[] stringlijst){
+    public int[] hakenkoppel_te_verdrijven(String[] stringlijst){ //dus in ( a + (3 * b)) zijn de haken (, ) in 3*b
+        //te verdrijven, dus indexen zijn 3,7
         ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
-        int haak_open_index = 0;
-        int haak_gesloten_index = 0;
-        int index_loop = 0;
-        while(stringlijst_nieuw.contains("(") && index_loop <= stringlijst_nieuw.size()){
-            if(stringlijst_nieuw.get(index_loop) == "("){
-                haak_open_index = index_loop;
+        int haak_open_index=0;
+        int haak_gesloten_index=0;
+
+        for(int i=0; i<= stringlijst.length -1; i++) {
+            if (stringlijst[i] == "(") {
+                haak_open_index = i;
             }
-            if(stringlijst_nieuw.get(index_loop) == ")"){
-                haak_gesloten_index = index_loop;
+            if (stringlijst[i] == ")") {
+                haak_gesloten_index = i;
+                break;
             }
-            
         }
+        int[] koppel = {haak_open_index, haak_gesloten_index};
+        return(koppel);
+    }
+
+    public ArrayList<String> OAVDH_vereenvoudiger(String[] stringlijst){
+        ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
+        Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
+
+        while(stringlijst_nieuw.contains("(")){
+            String[] stringlijst_nieuw_str = stringlijst_nieuw.toArray(new String[stringlijst_nieuw.size()]);
+            int haak_open_index = vereenv.hakenkoppel_te_verdrijven(stringlijst_nieuw_str)[0];
+            int haak_gesloten_index = vereenv.hakenkoppel_te_verdrijven(stringlijst_nieuw_str)[1];
+
+            ArrayList<String> tussen_haken =
+                    new ArrayList<String>(stringlijst_nieuw.subList(haak_open_index+1, haak_gesloten_index-1));
+            String[] tussen_haken_str = tussen_haken.toArray(new String[tussen_haken.size()]);
+            String tussen_haken_vereenv = vereenv.OAVD_vereenvoudiger(tussen_haken_str);
+
+            for(int k = haak_open_index; k <= haak_gesloten_index; k++){
+                stringlijst_nieuw.remove(haak_open_index);
+            }
+            stringlijst_nieuw.add(tussen_haken_vereenv);
+        }
+        return(stringlijst_nieuw);
     }
 
     public static void main(String[] args) {
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
         String[] testlijst = {"(", "(", "3", "/", "4", ")", "-", "1", ")", "*", "6", "+", "9"};
-        System.out.println(vereenv.OAVD_vereenvoudiger(testlijst));
+        System.out.println(vereenv.OAVDH_vereenvoudiger(testlijst));
     }
 }
