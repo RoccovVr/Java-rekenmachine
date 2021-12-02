@@ -8,7 +8,7 @@ import java.util.LinkedList;
 public class Stringvereenvoudiger {
 
     //vereenvoudigt de stringlijst [2, /, 3, *, 4, +, 1] tot 2.67 + 1
-    public ArrayList<String> verm_deel_vereenvoudiger(String[] stringlijst){
+    public ArrayList<String> verm_deel_vereenvoudiger(ArrayList<String> stringlijst){
         ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
 
         Rekenen rekenobj = new Rekenen();
@@ -31,7 +31,7 @@ public class Stringvereenvoudiger {
         }
 
     //vereenvoudigt de stringlijst [2, /, 3, *, 4, +, 1] tot 2.67 + 1
-    public ArrayList<String> plus_min_vereenvoudiger(String[] stringlijst){
+    public ArrayList<String> plus_min_vereenvoudiger(ArrayList<String> stringlijst){
         ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
 
         Rekenen rekenobj = new Rekenen();
@@ -53,11 +53,10 @@ public class Stringvereenvoudiger {
         return(stringlijst_nieuw);
     }
 
-    public String OAVD_vereenvoudiger(String[] stringlijst){
+    public String OAVD_vereenvoudiger(ArrayList<String> stringlijst){
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
         ArrayList<String> VD_verdrijf = vereenv.verm_deel_vereenvoudiger(stringlijst);
-        String[] VD_verdrijf_array = VD_verdrijf.toArray(new String[VD_verdrijf.size()]);
-        ArrayList<String> OA_verdrijf = vereenv.plus_min_vereenvoudiger(VD_verdrijf_array);
+        ArrayList<String> OA_verdrijf = vereenv.plus_min_vereenvoudiger(VD_verdrijf);
         return(OA_verdrijf.get(0));
     }
 
@@ -80,7 +79,7 @@ public class Stringvereenvoudiger {
         return(koppel);
     }
 
-    public String OAVDH_vereenvoudiger(String[] stringlijst){
+    public String OAVDH_vereenvoudiger(ArrayList<String> stringlijst){
         ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
 
@@ -91,8 +90,7 @@ public class Stringvereenvoudiger {
 
             ArrayList<String> tussen_haken =
                     new ArrayList<String>(stringlijst_nieuw.subList(haak_open_index+1, haak_gesloten_index));
-            String[] tussen_haken_str = tussen_haken.toArray(new String[tussen_haken.size()]);
-            String tussen_haken_vereenv = vereenv.OAVD_vereenvoudiger(tussen_haken_str);
+            String tussen_haken_vereenv = vereenv.OAVD_vereenvoudiger(tussen_haken);
 
             for(int k = haak_open_index; k <= haak_gesloten_index; k++){
                 stringlijst_nieuw.remove(haak_open_index);
@@ -100,13 +98,24 @@ public class Stringvereenvoudiger {
             stringlijst_nieuw.add(haak_open_index, tussen_haken_vereenv);
         }
 
-        String[] stringlijst_nieuw_str = stringlijst_nieuw.toArray(new String[stringlijst_nieuw.size()]);
-        return(OAVD_vereenvoudiger(stringlijst_nieuw_str));
+        return(OAVD_vereenvoudiger(stringlijst_nieuw));
+    }
+
+    public String eindresultaat(String str){
+        Stringsplitter splitter = new Stringsplitter();
+        Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
+
+        ArrayList<String> string_gesplit = splitter.stringsplitterOAVDH(str);
+        String resultaat = vereenv.OAVDH_vereenvoudiger(string_gesplit);
+        return(resultaat);
     }
 
     public static void main(String[] args) {
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
-        String[] testlijst = {"(", "(", "3", "/", "4", ")", "-", "1", ")", "*", "6", "+", "9"};
-        System.out.println(vereenv.OAVDH_vereenvoudiger(testlijst));
+        Stringsplitter splitter = new Stringsplitter();
+        String teststr = "(9-2*3)+1";
+        System.out.println(teststr);
+        //System.out.println(splitter.stringsplitterOAVDH(teststr));
+        //System.out.println(vereenv.eindresultaat(teststr));
     }
 }
