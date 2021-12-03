@@ -105,7 +105,7 @@ public class Stringvereenvoudiger {
         Stringsplitter splitter = new Stringsplitter();
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
 
-        ArrayList<String> string_gesplit = splitter.stringsplitterOAVDH(str);
+        ArrayList<String> string_gesplit = splitter.stringsplitterOVDH(str);
         String resultaat = vereenv.OAVDH_vereenvoudiger(string_gesplit);
         return(resultaat);
     }
@@ -115,7 +115,5 @@ public class Stringvereenvoudiger {
         Stringsplitter splitter = new Stringsplitter();
         String teststr = "(9-2*3)+1";
         System.out.println(teststr);
-        //System.out.println(splitter.stringsplitterOAVDH(teststr));
-        //System.out.println(vereenv.eindresultaat(teststr));
     }
 }
