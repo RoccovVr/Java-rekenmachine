@@ -7,35 +7,88 @@ import java.util.ArrayList;
 
 public class Stringsplitter {
 
-    static final String keer = "\\*";
-    static final String deel = "/";
-    static final String min = "-";
-    static final String plus = "+";
-    static final String haak_open = "(";
-    static final String haak_gesloten = ")";
+    static final Character keer = '*';
+    static final Character deel = '/';
+    static final Character min = '-';
+    static final Character plus = '+';
+    static final Character haak_open = '(';
+    static final Character haak_gesloten = ')';
 
-    public ArrayList<Character> OAVDlijst(){
-        ArrayList<Character> OAVD = new ArrayList<Character>();
-        OAVD.add('+');
-        OAVD.add('-');
-        OAVD.add('*');
-        OAVD.add('/');
-        return(OAVD);
-    }
+    public ArrayList<String> splitter_multikar(String string, ArrayList<Character> splitkars){
+        ArrayList<String> gesplit = new ArrayList<>();
+        int splitindex = 0;
 
-    //split "2*1+3" in [2, *, 1, +, 3]
-    public ArrayList<String> stringsplitterOAVDH(String str){
-        String[] gesplit_str;
-        //gesplit_str = str.split( (?=keer)| (?<=keer)| (?=deel)| (?<=deel)| (?=haak_open)| (?<=haak_open)|  +
-             //   (?=plus)| (?<=plus)| (?=min)| (?<=min)| (?=haak_gesloten)| (?<=haak_gesloten)  );
-        gesplit_str = str.split("((?=\\+)|(?=\\-)|(?<=\\+)|(?<=\\-))");
-        ArrayList<String> gesplit = new ArrayList(Arrays.asList(gesplit_str));
-        System.out.println(gesplit);
+        for(int i = 0; i <= string.length()-1; i++){
+            if(splitkars.contains(string.charAt(i)) ){
+                String substring = string.substring(splitindex, i);
+                if(substring.length() != 0){
+                    gesplit.add(substring);
+                }
+                gesplit.add(string.substring(i,i+1));
+                splitindex = i+1;
+            }
+        }
+        gesplit.add(string.substring(splitindex,string.length()));
         return(gesplit);
     }
 
+    //split "2*1-3" in [2, *, 1, -, 3], maar de min wordt dus soms ten onrechte gesplit
+    public ArrayList<String> stringsplitterOVDH(String str){
+        Stringsplitter stringsplitobj = new Stringsplitter();
+        ArrayList<Character> multikars = new ArrayList<>();
+        multikars.add(keer);
+        multikars.add(deel);
+        multikars.add(plus);
+        multikars.add(min);
+        multikars.add(haak_gesloten);
+        multikars.add(haak_open);
+
+        ArrayList<String> gesplit = stringsplitobj.splitter_multikar(str, multikars);
+        return(gesplit);
+    }
+
+    public ArrayList<String> stringsplitterA(ArrayList<String> stringlijst){ //doet wat aan de min
+        int i = 0;
+        if(stringlijst.get(0).equals("-")) {
+            String nieuw_element = stringlijst.get(0) + stringlijst.get(1);
+            stringlijst.remove(0);
+            stringlijst.remove(0);
+            stringlijst.add(0, nieuw_element);
+            i++;
+            System.out.println(stringlijst);
+        }
+        while(i <= stringlijst.size()-2){
+            if(stringlijst.get(i).equals("-")){
+                if(!stringlijst.get(i-1).matches("^\\d+$")){
+                    String nieuw_element = stringlijst.get(i) + stringlijst.get(i+1);
+                    for(int k=1; k <= 2; k++){
+                        stringlijst.remove(i);
+                    }
+                    stringlijst.add(i, nieuw_element);
+                    System.out.println("bla");
+                    System.out.println(i);
+                }
+                if(stringlijst.get(i).equals("(")) {
+                    String een = "1";
+                    String keer = "*";
+                    stringlijst.add(i+1, keer);
+                    stringlijst.add(i+1, een);
+                    i=i+2;
+                }
+            }else{
+                i++;
+            }
+        }
+        return(stringlijst);
+    }
+
+    public ArrayList<String> stringsplitterOAVDH(String str){
+        ArrayList<String> stringlijstOVDH = stringsplitterOVDH(str);
+        ArrayList<String> stringlijstA = stringsplitterA(stringlijstOVDH);
+        return(stringlijstA);
+    }
     public static void main(String[] args) {
-        String teststring = "(900*2+1)/(5-4)";
+        String teststring = "-(-98*2+1)/(5004)-877";
         Stringsplitter stringsplitobj = new Stringsplitter();
         System.out.println(stringsplitobj.stringsplitterOAVDH(teststring));
     }
