@@ -28,7 +28,11 @@ public class Stringsplitter {
                 splitindex = i+1;
             }
         }
-        gesplit.add(string.substring(splitindex,string.length()));
+
+        String substr = string.substring(splitindex, string.length());
+        if(substr.length()!= 0){
+            gesplit.add(substr);
+        }
         return(gesplit);
     }
 
@@ -47,49 +51,86 @@ public class Stringsplitter {
         return(gesplit);
     }
 
-    public ArrayList<String> stringsplitterA(ArrayList<String> stringlijst){ //doet wat aan de min
+    public ArrayList<String> stringsplitter_min_voor_haak(ArrayList<String> stringlijst) { //zet -( om naar -1*(
         int i = 0;
-        if(stringlijst.get(0).equals("-")) {
-            String nieuw_element = stringlijst.get(0) + stringlijst.get(1);
-            stringlijst.remove(0);
-            stringlijst.remove(0);
-            stringlijst.add(0, nieuw_element);
+        while (i <= stringlijst.size() - 2) {
+            if (stringlijst.get(i).equals("-") & stringlijst.get(i + 1).equals("(")) {
+                stringlijst.add(i + 1, "*");
+                stringlijst.add(i + 1, "1");
+            }
             i++;
-            System.out.println(stringlijst);
+        }
+        return (stringlijst);
+    }
+
+    public ArrayList<String> stringsplitter_min_dubbelzin(ArrayList<String> stringlijst) { //split geen negatieve getallen
+        int i = 0;
+        if (stringlijst.get(0).equals("-")){
+            String nieuw_element = stringlijst.get(0) + stringlijst.get(1);
+            for(int k=1; k <= 2; k++){
+                stringlijst.remove(0);
+            }
+            stringlijst.add(0, nieuw_element);
+        }
+        i++;
+        while(i <= stringlijst.size()-2){
+            if(stringlijst.get(i).equals("-") & !stringlijst.get(i-1).matches("^\\d+$")){
+                String nieuw_element = stringlijst.get(i) + stringlijst.get(i+1);
+                for(int k=1; k <= 2; k++){
+                    stringlijst.remove(i);
+                }
+                stringlijst.add(i, nieuw_element);
+            }
+            i++;
+        }
+        return(stringlijst);
+    }
+
+
+        /*
+            }else {
+                String nieuw_element = stringlijst.get(0) + stringlijst.get(1);
+                stringlijst.remove(0);
+                stringlijst.remove(0);
+                stringlijst.add(0, nieuw_element);
+                i++;
+            }
         }
         while(i <= stringlijst.size()-2){
             if(stringlijst.get(i).equals("-")){
+                if(stringlijst.get(i+1).equals("(")) {
+                    String een = "1";
+                    String keer = "*";
+                    stringlijst.add(i+1, keer);
+                    stringlijst.add(i+1, een);
+                    i=i+3;
+                }
                 if(!stringlijst.get(i-1).matches("^\\d+$")){
                     String nieuw_element = stringlijst.get(i) + stringlijst.get(i+1);
                     for(int k=1; k <= 2; k++){
                         stringlijst.remove(i);
                     }
                     stringlijst.add(i, nieuw_element);
-                    System.out.println("bla");
-                    System.out.println(i);
                 }
-                if(stringlijst.get(i).equals("(")) {
-                    String een = "1";
-                    String keer = "*";
-                    stringlijst.add(i+1, keer);
-                    stringlijst.add(i+1, een);
-                    i=i+2;
-                }
+
             }else{
                 i++;
             }
         }
         return(stringlijst);
     }
+    */
 
     public ArrayList<String> stringsplitterOAVDH(String str){
         ArrayList<String> stringlijstOVDH = stringsplitterOVDH(str);
-        ArrayList<String> stringlijstA = stringsplitterA(stringlijstOVDH);
-        return(stringlijstA);
+        ArrayList<String> stringlijstA1 = stringsplitter_min_voor_haak(stringlijstOVDH);
+        ArrayList<String> stringlijstA2 = stringsplitter_min_dubbelzin(stringlijstA1);
+        return(stringlijstA2);
     }
     public static void main(String[] args) {
-        String teststring = "-(-98*2+1)/(5004)-877";
+        String teststring = "-90-(877+ 9)*(200)";
         Stringsplitter stringsplitobj = new Stringsplitter();
         System.out.println(stringsplitobj.stringsplitterOAVDH(teststring));
     }
 }
+
