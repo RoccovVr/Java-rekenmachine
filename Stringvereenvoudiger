@@ -9,14 +9,14 @@ public class Stringvereenvoudiger {
 
     //vereenvoudigt de stringlijst [2, /, 3, *, 4, +, 1] tot 2.67 + 1
     public ArrayList<String> verm_deel_vereenvoudiger(ArrayList<String> stringlijst){
-        ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
+        ArrayList<String> stringlijst_nieuw = stringlijst;
 
         Rekenen rekenobj = new Rekenen();
 
         int i =1;
         while(i <= stringlijst_nieuw.size()-2){
             //als hij * tegenkomt in [..., 3, *, 4, ...] dan maakt hij ervan: [..., 3*4, ...]
-            if(stringlijst_nieuw.get(i) == "*" || stringlijst_nieuw.get(i)== "/"){
+            if(stringlijst_nieuw.get(i).equals("*") || stringlijst_nieuw.get(i).equals("/")){
                 String add_to_new1 = stringlijst_nieuw.get(i-1) + stringlijst_nieuw.get(i) + stringlijst_nieuw.get(i+1);
                 String add_to_new2 = Double.toString(rekenobj.resultaat_VD(add_to_new1));
                 for(int k=1; k<= 3; k++) {
@@ -32,14 +32,14 @@ public class Stringvereenvoudiger {
 
     //vereenvoudigt de stringlijst [2, /, 3, *, 4, +, 1] tot 2.67 + 1
     public ArrayList<String> plus_min_vereenvoudiger(ArrayList<String> stringlijst){
-        ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
+        ArrayList<String> stringlijst_nieuw = stringlijst;
 
         Rekenen rekenobj = new Rekenen();
 
         int i =1;
         while(i <= stringlijst_nieuw.size()-2){
             //als hij * tegenkomt in [..., 3, +, 4, ...] dan maakt hij ervan: [..., 3+4, ...]
-            if(stringlijst_nieuw.get(i) == "+" || stringlijst_nieuw.get(i)== "-"){
+            if(stringlijst_nieuw.get(i).equals("+") || stringlijst_nieuw.get(i).equals("-")){
                 String add_to_new1 = stringlijst_nieuw.get(i-1) + stringlijst_nieuw.get(i) + stringlijst_nieuw.get(i+1);
                 String add_to_new2 = Double.toString(rekenobj.resultaat_OA(add_to_new1));
                 for(int k=1; k<= 3; k++) {
@@ -67,10 +67,10 @@ public class Stringvereenvoudiger {
         int haak_gesloten_index=0;
 
         for(int i=0; i<= stringlijst.length -1; i++) {
-            if (stringlijst[i] == "(") {
+            if (stringlijst[i].equals("(")) {
                 haak_open_index = i;
             }
-            if (stringlijst[i] == ")") {
+            if (stringlijst[i].equals(")")) {
                 haak_gesloten_index = i;
                 break;
             }
@@ -80,7 +80,7 @@ public class Stringvereenvoudiger {
     }
 
     public String OAVDH_vereenvoudiger(ArrayList<String> stringlijst){
-        ArrayList<String> stringlijst_nieuw = new ArrayList(Arrays.asList(stringlijst));
+        ArrayList<String> stringlijst_nieuw = stringlijst;
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
 
         while(stringlijst_nieuw.contains("(")){
@@ -89,7 +89,7 @@ public class Stringvereenvoudiger {
             int haak_gesloten_index = vereenv.hakenkoppel_te_verdrijven(stringlijst_nieuw_str)[1];
 
             ArrayList<String> tussen_haken =
-                    new ArrayList<String>(stringlijst_nieuw.subList(haak_open_index+1, haak_gesloten_index));
+                    new ArrayList<>(stringlijst_nieuw.subList(haak_open_index+1, haak_gesloten_index));
             String tussen_haken_vereenv = vereenv.OAVD_vereenvoudiger(tussen_haken);
 
             for(int k = haak_open_index; k <= haak_gesloten_index; k++){
@@ -105,7 +105,8 @@ public class Stringvereenvoudiger {
         Stringsplitter splitter = new Stringsplitter();
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
 
-        ArrayList<String> string_gesplit = splitter.stringsplitterOVDH(str);
+        ArrayList<String> string_gesplit = splitter.stringsplitterOAVDH(str);
+        System.out.println(string_gesplit);
         String resultaat = vereenv.OAVDH_vereenvoudiger(string_gesplit);
         return(resultaat);
     }
@@ -113,7 +114,7 @@ public class Stringvereenvoudiger {
     public static void main(String[] args) {
         Stringvereenvoudiger vereenv = new Stringvereenvoudiger();
         Stringsplitter splitter = new Stringsplitter();
-        String teststr = "(9-2*3)+1";
-        System.out.println(teststr);
+        String teststr = "-8+-(2+(2*9)+-3)";
+        System.out.println(vereenv.eindresultaat(teststr));
     }
 }
